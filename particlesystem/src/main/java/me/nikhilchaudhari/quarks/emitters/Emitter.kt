@@ -2,6 +2,7 @@ package me.nikhilchaudhari.quarks.emitters
 
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import me.nikhilchaudhari.quarks.core.Vector2D
+import me.nikhilchaudhari.quarks.particle.*
 import me.nikhilchaudhari.quarks.particle.Particle
 import me.nikhilchaudhari.quarks.particle.ParticleConfigData
 import me.nikhilchaudhari.quarks.particle.createAccelerationVector
@@ -24,7 +25,7 @@ internal abstract class Emitter(
 
     private fun createFreshParticle(): Particle {
         return Particle(
-            initialX = particleConfigData.x,
+            initialX = particleConfigData.x.randomLong().toFloat(),
             initialY = particleConfigData.y,
             color = particleConfigData.particleColor.getExactColor(),
             size = particleConfigData.particleSize.getExactSize(),
@@ -32,6 +33,8 @@ internal abstract class Emitter(
             acceleration = particleConfigData.acceleration.createAccelerationVector(),
             lifetime = particleConfigData.lifeTime.maxLife,
             agingFactor = particleConfigData.lifeTime.agingFactor,
+            shape = particleConfigData.shapes.randomOrNull(),
+            rotationSpeed = particleConfigData.rotationSpeed
         )
     }
 

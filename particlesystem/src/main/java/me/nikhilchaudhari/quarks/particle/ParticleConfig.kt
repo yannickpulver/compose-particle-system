@@ -1,6 +1,8 @@
 package me.nikhilchaudhari.quarks.particle
 
+import android.graphics.Bitmap
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import me.nikhilchaudhari.quarks.core.TWO_PI
 import me.nikhilchaudhari.quarks.core.Vector2D
 import kotlin.math.cos
@@ -62,6 +64,7 @@ internal fun ParticleSize.getExactSize(): Float {
     }
 }
 
+
 sealed class ParticleColor {
     data class SingleColor(val color: Color = Color.Yellow) : ParticleColor()
     data class RandomColors(val colors: List<Color>) : ParticleColor()
@@ -94,14 +97,21 @@ sealed class EmissionType {
 }
 
 internal data class ParticleConfigData(
-   val x: Float = 0f,
-   val y: Float = 0f,
-   val velocity: Velocity,
-   val force: Force,
-   val acceleration: Acceleration,
-   val particleSize: ParticleSize,
-   val particleColor: ParticleColor,
-   val lifeTime: LifeTime,
-   val emissionType: EmissionType,
+    val x: LongRange = 0L..0L,
+    val y: Float = 0f,
+    val velocity: Velocity,
+    val force: Force,
+    val acceleration: Acceleration,
+    val particleSize: ParticleSize,
+    val particleColor: ParticleColor,
+    val lifeTime: LifeTime,
+    val emissionType: EmissionType,
+    val shapes: List<Bitmap> = listOf(),
+    val rotationSpeed: Float = 0f
 )
+
+
+fun LongProgression.randomLong(): Long {
+    return Random.nextLong(first, last)
+}
 

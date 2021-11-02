@@ -5,10 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import me.nikhilchaudhari.compose_particle_system.ui.theme.ComposeparticlesystemTheme
 import me.nikhilchaudhari.quarks.CreateParticles
 import me.nikhilchaudhari.quarks.core.PI
@@ -31,9 +33,9 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(Color.Black)
                 ) {
-                    Fountain()
+                    //Fountain()
 //                    Meteor()
-//                    Confetti()
+                    Confetti()
 //                    SnowFall()
 //                    Explosion()
                 }
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
         CreateParticles(
             modifier = Modifier
                 .fillMaxSize(),
-            x = 500f, y = 2000f,
+            x = 500L..500L, y = 2000f,
             velocity = Velocity(xDirection = 1f, yDirection = -15f, angle = PI, randomize = true),
             force = Force.Gravity(0.2f),
             acceleration = Acceleration(0f, -4f),
@@ -60,19 +62,27 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun Confetti() {
-        CreateParticles(
-            modifier = Modifier
-                .fillMaxSize(),
-            x = 500f, y = 200f,
-            velocity = Velocity(xDirection = 2f, yDirection = -2f, randomize = true),
-            force = Force.Gravity(0.3f),
-            acceleration = Acceleration(),
-            particleSize = ParticleSize.RandomSizes(20..60),
-            particleColor = ParticleColor.RandomColors(listOf(Color.Yellow, Color.Blue, Color.Red, Color.White, Color.Magenta, Color.Green)),
-            lifeTime = LifeTime(255f, 2f),
-            emissionType = EmissionType.FlowEmission(maxParticlesCount = EmissionType.FlowEmission.INDEFINITE, emissionRate = 0.8f),
-            durationMillis = 10 * 1000
-        )
+        BoxWithConstraints {
+            val width = with(LocalDensity.current) { maxWidth.toPx() }
+
+            CreateParticles(
+                modifier = Modifier.fillMaxSize(),
+                x = 0L..width.toLong(), y = -100f,
+                velocity = Velocity(xDirection = 1f, yDirection = -2f, randomize = true),
+                force = Force.Gravity(0.2f),
+                acceleration = Acceleration(),
+                particleSize = ParticleSize.RandomSizes(20..60),
+                particleColor = ParticleColor.RandomColors(listOf(Color.White)),
+                lifeTime = LifeTime(500f, 2f),
+                emissionType = EmissionType.FlowEmission(
+                    maxParticlesCount = EmissionType.FlowEmission.INDEFINITE,
+                    emissionRate = 0.8f
+                ),
+                durationMillis = 10 * 1000,
+                shapes = listOf(R.drawable.shape_ellipse, R.drawable.shape_stroke, R.drawable.shape_triangle, R.drawable.shape_rectangle),
+                rotationSpeed = 10f
+            )
+        }
     }
 
 
@@ -81,7 +91,7 @@ class MainActivity : ComponentActivity() {
         CreateParticles(
             modifier = Modifier
                 .fillMaxSize(),
-            x = 500f, y = 1200f,
+            x = 500L..500L, y = 1200f,
             velocity = Velocity(xDirection = 1f, yDirection = 1f, randomize = true),
             force = Force.Wind(-0.2f, -0.1f),
             acceleration = Acceleration(-1f, -2f),
@@ -98,7 +108,7 @@ class MainActivity : ComponentActivity() {
         CreateParticles(
             modifier = Modifier
                 .fillMaxSize(),
-            x = 500f, y = 1000f,
+            x = 500L..500L, y = 1000f,
             velocity = Velocity(xDirection = -2f, yDirection = 2f),
             force = Force.Gravity(0.0f),
             acceleration = Acceleration(1f, 1f),
@@ -115,7 +125,7 @@ class MainActivity : ComponentActivity() {
         CreateParticles(
             modifier = Modifier
                 .fillMaxSize(),
-            x = 500f, y = -50f,
+            x = 500L..500L, y = -50f,
             velocity = Velocity(xDirection = 1f, yDirection = 1f, randomize = true),
             force = Force.Gravity(0.01f),
             acceleration = Acceleration(),

@@ -1,30 +1,18 @@
 package me.nikhilchaudhari.quarks
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import me.nikhilchaudhari.quarks.emitters.ParticleExplodeEmitter
 import me.nikhilchaudhari.quarks.emitters.ParticleFlowEmitter
-import me.nikhilchaudhari.quarks.particle.Acceleration
-import me.nikhilchaudhari.quarks.particle.EmissionType
-import me.nikhilchaudhari.quarks.particle.Force
-import me.nikhilchaudhari.quarks.particle.LifeTime
-import me.nikhilchaudhari.quarks.particle.ParticleColor
-import me.nikhilchaudhari.quarks.particle.ParticleConfigData
-import me.nikhilchaudhari.quarks.particle.ParticleSize
-import me.nikhilchaudhari.quarks.particle.Velocity
-import me.nikhilchaudhari.quarks.particle.createForceVector
+import me.nikhilchaudhari.quarks.particle.*
 
 @Composable
 fun CreateParticles(
     modifier: Modifier = Modifier,
-    x: Float = 0f,
+    x: LongRange = 0L..0L,
     y: Float = 0f,
     velocity: Velocity = Velocity(xDirection = 1f, yDirection = 1f),
     force: Force = Force.Gravity(0.0f),
@@ -34,7 +22,14 @@ fun CreateParticles(
     lifeTime: LifeTime = LifeTime(255f, 1f),
     emissionType: EmissionType = EmissionType.ExplodeEmission(),
     durationMillis: Int = 10000,
+    shapes: List<Int> = listOf(),
+    rotationSpeed: Float = 0f
 ) {
+    val context = LocalContext.current
+
+    val bitmaps = shapes.mapNotNull { drawable ->
+        BitmapUtils.bitmapFromDrawableRes(context, drawable)
+    }
 
     val dt = remember { mutableStateOf(0f) }
 
@@ -43,7 +38,17 @@ fun CreateParticles(
 
     val emitter = remember {
         val particleConfigData = ParticleConfigData(
-            x, y, velocity, force, acceleration, particleSize, particleColor, lifeTime, emissionType
+            x,
+            y,
+            velocity,
+            force,
+            acceleration,
+            particleSize,
+            particleColor,
+            lifeTime,
+            emissionType,
+            bitmaps,
+            rotationSpeed
         )
         when (emissionType) {
             is EmissionType.ExplodeEmission -> {
@@ -82,3 +87,5 @@ fun CreateParticles(
         emitter.update(dt.value)
     }
 }
+
+
