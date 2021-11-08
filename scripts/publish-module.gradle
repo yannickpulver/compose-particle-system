@@ -1,5 +1,4 @@
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
@@ -37,39 +36,7 @@ afterEvaluate {
 
                 artifact androidSourcesJar
 //                artifact javadocJar
-
-                pom {
-                    name = 'quarks'
-                    description = 'A light weight particle system for Jetpack Compose'
-                    url = 'https://github.com/CuriousNikhil/compose-particle-system'
-                    licenses {
-                        license {
-                            name = 'Apache License, Version 2.0'
-                            url = 'https://github.com/CuriousNikhil/compose-particle-system/blob/main/LICENSE'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'curiousnikhil'
-                            name = 'Nikhil Chaudhari'
-                            email = 'nikhyl777@gmail.com'
-                        }
-                    }
-                    scm {
-                        connection = 'scm:git:git://github.com/CuriousNikhil/compose-particle-system.git'
-                        developerConnection = 'scm:git:ssh://github.com/CuriousNikhil/compose-particle-system.git'
-                        url = 'https://github.com/CuriousNikhil/compose-particle-system'
-                    }
-                }
             }
         }
     }
-}
-
-ext["signing.keyId"] = rootProject.ext["signing.keyId"]
-ext["signing.password"] = rootProject.ext["signing.password"]
-ext["signing.secretKeyRingFile"] = rootProject.ext["signing.secretKeyRingFile"]
-
-signing {
-    sign publishing.publications
 }
