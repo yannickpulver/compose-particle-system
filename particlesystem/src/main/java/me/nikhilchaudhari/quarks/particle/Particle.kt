@@ -22,7 +22,7 @@ internal class Particle constructor(
     var lifetime: Float = 255f,
     var agingFactor: Float = 20f,
     var shape: Bitmap? = null,
-    var rotationSpeed: Float = 0f
+    var rotationSpeed: IntRange = 0..1
 ) : Vector2D(initialX, initialY) {
 
     private val originalLife = lifetime
@@ -61,8 +61,18 @@ internal class Particle constructor(
         ).asImageBitmap()
     }
 
+    private var rotationDirectionAndSpeed = needSomeSpeed(rotationSpeed.random())
+
+    private fun needSomeSpeed(random: Int):Int{
+        return when(random){
+            in -8..0 -> random - 8
+            in 1..8 -> random + 8
+            else -> random
+        }
+    }
+
     fun show(drawScope: DrawScope) {
-        rotation = (rotation + rotationSpeed) % 360
+        rotation = (rotation + rotationDirectionAndSpeed) % 360
         drawScope.rotate(rotation, pivot = Offset(x, y)) {
             sizedShape?.let { bitmap ->
                 drawScope.drawImage(
@@ -79,6 +89,5 @@ internal class Particle constructor(
                 style = Stroke(width = 10.0f)
             )
         }
-
     }
 }

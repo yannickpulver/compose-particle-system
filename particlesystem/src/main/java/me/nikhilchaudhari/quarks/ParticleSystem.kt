@@ -1,5 +1,6 @@
 package me.nikhilchaudhari.quarks
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -23,7 +24,8 @@ fun CreateParticles(
     emissionType: EmissionType = EmissionType.ExplodeEmission(),
     durationMillis: Int = 10000,
     shapes: List<Int> = listOf(),
-    rotationSpeed: Float = 0f
+    rotationSpeed: IntRange = 0..1,
+    onFinished: ()->Unit = {},
 ) {
     val context = LocalContext.current
 
@@ -33,7 +35,6 @@ fun CreateParticles(
 
     val dt = remember { mutableStateOf(0f) }
 
-    var startTime by remember { mutableStateOf(0L) }
     var previousTime by remember { mutableStateOf(System.nanoTime()) }
 
     val emitter = remember {
@@ -58,22 +59,14 @@ fun CreateParticles(
                 ParticleFlowEmitter(
                     durationMillis,
                     emissionType,
-                    particleConfigData
+                    particleConfigData,
                 )
             }
         }
     }
-
-    startTime = System.currentTimeMillis()
+    var finished = false
     LaunchedEffect(Unit) {
-        val condition = if (emissionType is EmissionType.FlowEmission &&
-            emissionType.maxParticlesCount == EmissionType.FlowEmission.INDEFINITE
-        ) {
-            true
-        } else {
-            System.currentTimeMillis() - startTime < durationMillis
-        }
-        while (condition) {
+        while (!finished) {
             withFrameNanos {
                 dt.value = ((it - previousTime) / 1E7).toFloat()
                 previousTime = it
@@ -84,8 +77,9 @@ fun CreateParticles(
     Canvas(modifier) {
         emitter.render(this)
         emitter.applyForce(force.createForceVector())
-        emitter.update(dt.value)
+        finished = emitter.update(dt.value)
+        if (finished)onFinished()
+
     }
 }
-
 

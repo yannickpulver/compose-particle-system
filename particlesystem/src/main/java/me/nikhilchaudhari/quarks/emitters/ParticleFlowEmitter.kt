@@ -1,5 +1,6 @@
 package me.nikhilchaudhari.quarks.emitters
 
+import android.util.Log
 import me.nikhilchaudhari.quarks.particle.EmissionType
 import me.nikhilchaudhari.quarks.particle.ParticleConfigData
 
@@ -12,6 +13,7 @@ internal class ParticleFlowEmitter(
     private var particleCount = 0
     private var elapsed = 0f
     private var elapsedTimeParticleCreation = 0f
+    private var startTime = System.currentTimeMillis()
 
     override fun generateParticles(numberOfParticles: Int) {
         if (this.isFull()) {
@@ -22,17 +24,17 @@ internal class ParticleFlowEmitter(
     }
 
     private fun isTimeElapsed(): Boolean {
-        return when (durationMillis) {
-            0 -> false
-            EmissionType.FlowEmission.INDEFINITE -> false
-            else -> elapsed >= durationMillis
-        }
+        Log.d("ParticleFlowEmitter", "timeInfo: ${System.currentTimeMillis() - startTime} "+"/"+"$durationMillis$")
+        return if (emissionConfig.maxParticlesCount == EmissionType.FlowEmission.INDEFINITE){
+            false
+        } else System.currentTimeMillis() - startTime > durationMillis
     }
 
     private fun isFull(): Boolean = emissionConfig.maxParticlesCount in 1..(particleCount)
 
-    override fun update(dt: Float) {
+    override fun update(dt: Float):Boolean {
         elapsedTimeParticleCreation += dt
+
         if (elapsedTimeParticleCreation >= 1 && !isTimeElapsed()) {
             val amount = (emissionConfig.emissionRate * elapsedTimeParticleCreation).toInt()
             generateParticles(amount)
@@ -44,6 +46,10 @@ internal class ParticleFlowEmitter(
             val particle = particlePool[i]
             particle.update(dt)
         }
-        particlePool.removeAll { it.finished() }
+        particlePool.removeAll {
+            it.finished()
+        }
+        return particlePool.isEmpty() && isTimeElapsed()
+
     }
 }
