@@ -15,10 +15,11 @@ internal class ParticleExplodeEmitter(
         repeat(numberOfParticles) { addParticle() }
     }
 
-    override fun update(dt: Float) {
+    override fun update(dt: Float):Boolean {
         for (particle in particlePool) {
             particle.update(dt)
         }
         particlePool.removeAll { it.finished() }
+        return particlePool.isEmpty()
     }
 }

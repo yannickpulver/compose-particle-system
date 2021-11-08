@@ -44,7 +44,7 @@ internal abstract class Emitter(
         }
     }
 
-    abstract fun update(dt: Float)
+    abstract fun update(dt: Float):Boolean
 
     fun render(drawScope: DrawScope) {
         for (particle in particlePool) {

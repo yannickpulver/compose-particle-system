@@ -107,7 +107,7 @@ internal data class ParticleConfigData(
     val lifeTime: LifeTime,
     val emissionType: EmissionType,
     val shapes: List<Bitmap> = listOf(),
-    val rotationSpeed: Float = 0f
+    val rotationSpeed: IntRange = 0..1
 )
 
 
