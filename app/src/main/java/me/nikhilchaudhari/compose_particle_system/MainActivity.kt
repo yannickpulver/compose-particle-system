@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                 ),
                 durationMillis = 10 * 1000,
                 shapes = listOf(R.drawable.shape_ellipse, R.drawable.shape_stroke, R.drawable.shape_triangle, R.drawable.shape_rectangle),
-                rotationSpeed = 10f
+                rotationSpeed = 0..0
             )
         }
     }
