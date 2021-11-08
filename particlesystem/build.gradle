@@ -5,11 +5,11 @@ plugins {
 
 ext {
     PUBLISH_GROUP_ID = 'me.nikhilchaudhari'
-    PUBLISH_VERSION = '1.0.0-alpha03'
+    PUBLISH_VERSION = '1.0.0-alpha04'
     PUBLISH_ARTIFACT_ID = 'quarks'
 }
 
-apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+//apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 
 android {
