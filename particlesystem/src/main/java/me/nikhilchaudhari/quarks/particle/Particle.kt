@@ -61,7 +61,7 @@ internal class Particle constructor(
         ).asImageBitmap()
     }
 
-    private var rotationDirectionAndSpeed = needSomeSpeed(rotationSpeed.random())
+    private var rotationDirectionAndSpeed = if (rotationSpeed == 0..0) 0 else needSomeSpeed(rotationSpeed.random())
 
     private fun needSomeSpeed(random: Int):Int{
         return when(random){
